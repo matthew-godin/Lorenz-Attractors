@@ -77,6 +77,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="PlayerCamera.cs" />
     <Compile Include="SubjectiveCamera.cs" />
+    <Compile Include="TexturedCylinder.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="BasicPrimitive.cs" />
     <Compile Include="AnimatedBasicPrimitive.cs" />

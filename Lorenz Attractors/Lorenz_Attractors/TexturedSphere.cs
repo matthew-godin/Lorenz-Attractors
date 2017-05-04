@@ -5,28 +5,30 @@ using Microsoft.Xna.Framework;
 
 namespace Lorenz_Attractors
 {
-   public class TexturedSphere : AnimatedBasicPrimitive //Plane
-   {
-      //Initially managed by the constructor
-      readonly float Radius;
-      readonly int NumColumns;
-      readonly int NumLines;
-      readonly string TextureName;
+    public class TexturedSphere : AnimatedBasicPrimitive //Plane
+    {
+        //Initially managed by the constructor
+        readonly float Radius;
+        readonly int NumColumns;
+        readonly int NumLines;
+        readonly string TextureName;
 
-      readonly Vector3 Origin;
+        readonly Vector3 Origin;
 
-      //Initially managed by functions called by base.Initialize()
-      Vector3[,] VertexPts { get; set; }
-      Vector2[,] TexturePts { get; set; }
-      VertexPositionTexture[] Vertices { get; set; }
-      BasicEffect BscEffect { get; set; }
-      //BlendState AlphaMgr { get; set; }
+        //Initially managed by functions called by base.Initialize()
+        Vector3[,] VertexPts { get; set; }
+        Vector2[,] TexturePts { get; set; }
+        VertexPositionTexture[] Vertices { get; set; }
+        BasicEffect BscEffect { get; set; }
+        //BlendState AlphaMgr { get; set; }
 
-      int NumTrianglesPerStrip { get; set; }
+        int NumTrianglesPerStrip { get; set; }
 
-      //Initially managed by LoadContent()
-      ResourcesManager<Texture2D> TextureMgr { get; set; }
-      Texture2D SphereTexture { get; set; }
+        //Initially managed by LoadContent()
+        ResourcesManager<Texture2D> TextureMgr { get; set; }
+        Texture2D SphereTexture { get; set; }
+
+        List<Vector3> Spheres { get; set; }
 
       public TexturedSphere(Game game, float initialScale, Vector3 initialRotation,
                             Vector3 initialPosition, float radius, Vector2 dimensions,
@@ -43,6 +45,7 @@ namespace Lorenz_Attractors
 
       public override void Initialize()
       {
+            Spheres = new List<Vector3>();
          NumTrianglesPerStrip = NumColumns * 2;
          NumVertices = (NumTrianglesPerStrip + 2) * NumLines;
 
@@ -122,26 +125,37 @@ namespace Lorenz_Attractors
          base.LoadContent();
       }
 
+
+        public void AddSphere(Vector3 v)
+        {
+            Spheres.Add(v);
+        }
+
       public override void Draw(GameTime gameTime)
       {
-         BscEffect.World = GetWorld();
-         BscEffect.View = GameCamera.View;
-         BscEffect.Projection = GameCamera.Projection;
-         foreach (EffectPass passEffect in BscEffect.CurrentTechnique.Passes)
-         {
-            passEffect.Apply();
-            for (int i = 0; i < NumLines; ++i)
+            for(int j = 0; j < Spheres.Count; j++)
             {
-               DrawTriangleStrip(i);
+                Position = Spheres[j]; 
+                ComputeWorldMatrix();
+                BscEffect.World = GetWorld();
+                BscEffect.View = GameCamera.View;
+                BscEffect.Projection = GameCamera.Projection;
+                foreach (EffectPass passEffect in BscEffect.CurrentTechnique.Passes)
+                {
+                    passEffect.Apply();
+                    for (int i = 0; i < NumLines; ++i)
+                    {
+                        DrawTriangleStrip(i);
+                    }
+                }
             }
-         }
       }
 
-      void DrawTriangleStrip(int stripIndex)
-      {
-         int vertexOffset = (stripIndex * NumVertices) / NumLines;
-         GraphicsDevice.DrawUserPrimitives<VertexPositionTexture>(PrimitiveType.TriangleStrip, Vertices, vertexOffset, NumTrianglesPerStrip);
-      }
-
+        void DrawTriangleStrip(int stripIndex)
+        {
+            int vertexOffset = (stripIndex * NumVertices) / NumLines;
+            GraphicsDevice.DrawUserPrimitives<VertexPositionTexture>(PrimitiveType.TriangleStrip, Vertices, vertexOffset, NumTrianglesPerStrip);
+            Game.Window.Title = InitialPosition.ToString();
+        }
    }
 }
