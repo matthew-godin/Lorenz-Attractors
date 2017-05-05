@@ -27,7 +27,8 @@ namespace Lorenz_Attractors
         //VertexIndex base.Initialize()
         Vector3[,] VertexPts { get; set; }
         Vector2[,] TexturePts { get; set; }
-        VertexPositionTexture[] Vertices { get; set; }
+        //VertexPositionTexture[] Vertices { get; set; }
+        VertexPositionColor[] Vertices { get; set; }
         BasicEffect BscEffect { get; set; }
 
         int NumTrianglesPerStrip { get; set; }
@@ -50,13 +51,14 @@ namespace Lorenz_Attractors
 
         public TexturedCylinder(Game game, float initialScale, Vector3 initialRotation,
                               Vector3 initialPosition, Vector2 span, Vector2 dimensions,
-                              string textureName, float updateInterval, Vector3 extremity1, Vector3 extremity2)
+                              /*string textureName*/Color color, float updateInterval, Vector3 extremity1, Vector3 extremity2)
             : base(game, initialScale, initialRotation, initialPosition, updateInterval)
         {
             //Delta = span / dimensions;
             NumColumns = (int)dimensions.X;
             NumLines = (int)dimensions.Y;
-            TextureName = textureName;
+            //TextureName = textureName;
+            Color = color;
 
             //Origin = new Vector3(0,0,0);
             Origin = new Vector3(-span.X / 2, -span.Y / 2, 0);
@@ -80,15 +82,17 @@ namespace Lorenz_Attractors
         {
             VertexPts = new Vector3[NumColumns + 1, NumLines + 1];
             TexturePts = new Vector2[NumColumns + 1, NumLines + 1];
-            Vertices = new VertexPositionTexture[NumVertices];
+            //Vertices = new VertexPositionTexture[NumVertices];
+            Vertices = new VertexPositionColor[NumVertices];
         }
 
         protected void InitializeBscEffectParameters()
         {
-            CylinderTexture = TextureMgr.Find(TextureName);
+            //CylinderTexture = TextureMgr.Find(TextureName);
             BscEffect = new BasicEffect(GraphicsDevice);
-            BscEffect.TextureEnabled = true;
-            BscEffect.Texture = CylinderTexture;
+            //BscEffect.TextureEnabled = true;
+            BscEffect.VertexColorEnabled = true;
+            //BscEffect.Texture = CylinderTexture;
         }
 
         protected override void InitializeVertices()
@@ -122,6 +126,8 @@ namespace Lorenz_Attractors
             }
         }
 
+        Color Color { get; set; }
+
         protected void PopulateVertices()
         {
             int VertexIndex = -1;
@@ -129,15 +135,17 @@ namespace Lorenz_Attractors
             {
                 for (int i = 0; i < NumColumns + 1; ++i)
                 {
-                    Vertices[++VertexIndex] = new VertexPositionTexture(VertexPts[i, j], TexturePts[i, j]);
-                    Vertices[++VertexIndex] = new VertexPositionTexture(VertexPts[i, j + 1], TexturePts[i, j + 1]);
+                    //Vertices[++VertexIndex] = new VertexPositionTexture(VertexPts[i, j], TexturePts[i, j]);
+                    //Vertices[++VertexIndex] = new VertexPositionTexture(VertexPts[i, j + 1], TexturePts[i, j + 1]);
+                    Vertices[++VertexIndex] = new VertexPositionColor(VertexPts[i, j], Color);
+                    Vertices[++VertexIndex] = new VertexPositionColor(VertexPts[i, j + 1], Color);
                 }
             }
         }
 
         protected override void LoadContent()
         {
-            TextureMgr = Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>;
+            //TextureMgr = Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>;
             base.LoadContent();
         }
 
