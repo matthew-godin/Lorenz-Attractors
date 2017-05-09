@@ -30,8 +30,8 @@ namespace Lorenz_Attractors
         float TimeElpasedSinceUpdate { get; set; }
 
         float x = 0.01f;
-        float y = 0;
-        float z = 0;
+        float y = 0f;
+        float z = 0f;
 
         float a = 10;
         float b = 28;
@@ -65,7 +65,7 @@ namespace Lorenz_Attractors
             Services.AddService(typeof(ResourcesManager<SpriteFont>), new ResourcesManager<SpriteFont>(this, "Fonts"));
             Components.Add(InputManager);
             Components.Add(new Displayer3D(this));
-            Camera = new CameraJoueur(this, new Vector3(-5, 0, 0), new Vector3(20, 0, 0), Vector3.Up, FPS, 500);
+            Camera = new CameraJoueur(this, new Vector3(-500, 0, 0), new Vector3(20, 0, 0), Vector3.Up, FPS, 10000);
             Services.AddService(typeof(Camera), Camera);
             //Components.Add(new TexturedSphere(this, 1, Vector3.Zero, new Vector3(0, 0, 0), 1, new Vector2(20, 20), "White", FPS));
             Sphere = new TexturedSphere(this, 1, Vector3.Zero, Position, 0.1f, new Vector2(20, 20), "White", FPS);
@@ -148,10 +148,12 @@ namespace Lorenz_Attractors
             {
                 Hu = 0;
             }
+            int scaleConstant = 10;
+
             Components.Add(new TexturedCylinder(this, 1f, new Vector3(0, 0, 0),
                                     Vector3.Zero, new Vector2(1, 1), new Vector2(20, 20),
-                                    /*"White"*/new Color(R, G, B), UpdateInterval, PreviousPosition,
-                                    Position));
+                                    /*"White"*/new Color(R, G, B), UpdateInterval, scaleConstant * PreviousPosition,
+                                    scaleConstant * Position));
 
             //Sphere.AjouterSphere(Position);
 
