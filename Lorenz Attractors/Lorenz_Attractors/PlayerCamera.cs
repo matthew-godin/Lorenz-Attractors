@@ -705,7 +705,7 @@ namespace Lorenz_Attractors
         const float ACCELERATION = 0.001f;
         const float INITIAL_ROTATION_SPEED = 5f;
         const float INITIAL_ROTATION_SPEED_SOURIS = 0.1f;
-        protected const float INITIAL_TRANSLATION_SPEED = 0.5f;
+        protected const float INITIAL_TRANSLATION_SPEED = 4;//0.5f;
         const float DELTA_YAW = MathHelper.Pi / 180; // 1 degree at a time
         const float DELTA_PITCH = MathHelper.Pi / 180; // 1 degree at a time
         const float DELTA_ROLL = MathHelper.Pi / 180; // 1 degree at a time

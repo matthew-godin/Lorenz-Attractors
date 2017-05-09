@@ -71,7 +71,7 @@ namespace Lorenz_Attractors
             Sphere = new TexturedSphere(this, 1, Vector3.Zero, Position, 0.1f, new Vector2(20, 20), "White", FPS);
             Components.Add(Sphere);
             Components.Add(Camera);
-            Components.Add(new AfficheurFPS(this, "Arial", Color.Black, UpdateInterval));
+            Components.Add(new AfficheurFPS(this, "Arial", Color.Red, UpdateInterval));
             base.Initialize();
         }
 
@@ -141,7 +141,7 @@ namespace Lorenz_Attractors
 
             //Window.Title = Position.ToString();
             HsvToRgb(Hu, S, V, out R, out G, out B);
-            Window.Title = Camera.Position.ToString();
+            //Window.Title = Camera.Position.ToString();
 
             Hu += 0.1;
             if (Hu > 255)
