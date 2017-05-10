@@ -30,15 +30,22 @@ namespace Lorenz_Attractors
         float TimeElpasedSinceUpdate { get; set; }
 
         float x = 0.01f;
-        float y = 0f;
-        float z = 0f;
+        float y = 0;
+        float z = 0;
 
-        float a = 10;
-        float b = 28;
-        float c = 8 / 3f;
+        float x2 = 0.02f;
+        float y2 = 0f;
+        float z2 = 0f;
+
+        float a = 10;//2;//10;//10;
+        float b = 28;//30;//103;//28;
+        float c = 8 / 3f;//40;//50;//8 / 3f;
 
         Vector3 Position;
         Vector3 PreviousPosition;
+
+        Vector3 Position2;
+        Vector3 PreviousPosition2;
 
         public Game1()
         {
@@ -135,14 +142,21 @@ namespace Lorenz_Attractors
             x = x + dx;
             y = y + dy;
             z = z + dz;
+            
+            float dx2 = (a * (y2 - x2)) * dt;
+            float dy2 = (x2 * (b - z2) - y2) * dt;
+            float dz2 = (x2 * y2 - c * z2) * dt;
+            x2 = x2 + dx2;
+            y2 = y2 + dy2;
+            z2 = z2 + dz2;
 
             PreviousPosition = Position;
             Position = new Vector3(x, y, z);
 
-            //Window.Title = Position.ToString();
-            HsvToRgb(Hu, S, V, out R, out G, out B);
-            //Window.Title = Camera.Position.ToString();
+            PreviousPosition2 = Position2;
+            Position2 = new Vector3(x2, y2, z2);
 
+            HsvToRgb(Hu, S, V, out R, out G, out B);
             Hu += 0.1;
             if (Hu > 255)
             {
@@ -150,10 +164,19 @@ namespace Lorenz_Attractors
             }
             int scaleConstant = 10;
 
+
             Components.Add(new TexturedCylinder(this, 1f, new Vector3(0, 0, 0),
                                     Vector3.Zero, new Vector2(1, 1), new Vector2(20, 20),
-                                    /*"White"*/new Color(R, G, B), UpdateInterval, scaleConstant * PreviousPosition,
+                                    new Color(R, G, B), UpdateInterval, scaleConstant * PreviousPosition,
                                     scaleConstant * Position));
+            //Components.Add(new TexturedCylinder(this, 1f, new Vector3(0, 0, 0),
+            //                        Vector3.Zero, new Vector2(1, 1), new Vector2(20, 20),
+            //                        new Color(0, 255, 0), UpdateInterval, scaleConstant * PreviousPosition,
+            //                        scaleConstant * Position));
+            //Components.Add(new TexturedCylinder(this, 1f, new Vector3(0, 0, 0),
+            //                        Vector3.Zero, new Vector2(1, 1), new Vector2(20, 20),
+            //                        new Color(255, 0, 0), UpdateInterval, scaleConstant * PreviousPosition2,
+            //                        scaleConstant * Position2));
 
             //Sphere.AjouterSphere(Position);
 
